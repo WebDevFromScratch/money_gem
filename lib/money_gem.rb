@@ -1,5 +1,6 @@
 require 'money_gem/version'
 require 'money_gem/exchange'
+require 'bigdecimal'
 
 module Kernel
   def Money(amount, currency = MoneyGem::Money.default_currency)
@@ -19,7 +20,7 @@ module MoneyGem
 
     def initialize(amount, currency = self.class.default_currency)
       raise ArgumentError, 'No currency given' if currency == nil
-      @amount = amount.to_f
+      @amount = BigDecimal(amount.to_s)
       @currency = currency.to_s
     end
 

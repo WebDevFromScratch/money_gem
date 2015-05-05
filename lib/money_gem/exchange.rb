@@ -1,4 +1,5 @@
 require 'json'
+require 'bigdecimal'
 
 CURRENCIES = JSON.parse(IO.read('./lib/money_gem/currencies.json'))
 EXCHANGE_RATES = JSON.parse(IO.read('./lib/money_gem/exchange_rates.json'))
@@ -19,7 +20,7 @@ module MoneyGem
       if input_currency == output_currency
         amount_to_convert
       else
-        amount_to_convert * EXCHANGE_RATES["#{input_currency}_#{output_currency}"]
+        amount_to_convert * BigDecimal(EXCHANGE_RATES["#{input_currency}_#{output_currency}"].to_s)
       end
     end
 
