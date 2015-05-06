@@ -4,11 +4,11 @@ require 'bigdecimal'
 CURRENCIES = JSON.parse(IO.read('./lib/money_gem/currencies.json'))
 EXCHANGE_RATES = JSON.parse(IO.read('./lib/money_gem/exchange_rates.json'))
 
-class InvalidCurrency < StandardError
-end
-
 module MoneyGem
   class Exchange
+    class InvalidCurrency < StandardError
+    end
+
     def convert(money, currency)
       amount_to_convert = money.amount
       input_currency = money.currency

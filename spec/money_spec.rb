@@ -136,7 +136,6 @@ describe MoneyGem::Money do
       let(:money_usd) { MoneyGem::Money.new(10, 'USD') }
       let(:money_eur) { MoneyGem::Money.new(10, 'EUR') }
       before { allow(money_eur).to receive(:calculate_in).and_return(MoneyGem::Money.new(20, 'USD')) }
-      before { stub_const('CURRENCIES', ['USD', 'EUR']) }
 
       context 'when currencies are different' do
         it 'should execute #calculate_in' do
