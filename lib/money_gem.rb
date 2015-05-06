@@ -34,6 +34,14 @@ module MoneyGem
       end
     end
 
+    [:+, :-, :*, :/].each do |method_name|
+      define_method method_name do |other|
+        recalculated_other = calculate_if_necessary(other)
+
+        self.class.new(amount.send(method_name, recalculated_other.amount), currency)
+      end
+    end
+
     def method_missing(name)
       name = name.to_s
       if correct_conversion_method?(name)
@@ -44,11 +52,17 @@ module MoneyGem
     end
 
     def respond_to?(name)
-      if correct_conversion_method?(name.to_s)
+      if correct_conversion_method?(name.to_s) || ['+', '-', '*', '/'].include?(name.to_s)
         true
       else
         super
       end
+    end
+
+    def calculate_in(currency)
+      new_amount = self.class.exchange.convert(self, currency)
+      new_money = self.class.new(new_amount, currency)
+      new_money
     end
 
     def exchange_to(currency)
@@ -66,7 +80,7 @@ module MoneyGem
     end
 
     def self.exchange
-      MoneyGem::Exchange.new
+      Exchange.new
     end
 
     def self.using_default_currency(currency)
@@ -87,6 +101,14 @@ module MoneyGem
 
     def correct_conversion_method?(name)
       name.split('_').count == 2 && name.split('_').first == 'to' && CURRENCIES.include?(name.split('_').last.upcase)
+    end
+
+    def calculate_if_necessary(other)
+      if currency == other.currency
+        other
+      else
+        other.calculate_in(currency)
+      end
     end
   end
 end
