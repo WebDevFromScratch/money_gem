@@ -1,12 +1,7 @@
 require 'money_gem/version'
 require 'money_gem/exchange'
+require 'money_gem/kernel'
 require 'bigdecimal'
-
-module Kernel
-  def Money(amount, currency = MoneyGem::Money.default_currency)
-    MoneyGem::Money.new(amount, currency)
-  end
-end
 
 module MoneyGem
   class Money
