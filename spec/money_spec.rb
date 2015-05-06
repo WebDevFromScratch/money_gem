@@ -67,6 +67,18 @@ describe MoneyGem::Money do
   describe 'Instance methods' do
     let(:money) { MoneyGem::Money.new(10, 'USD') }
 
+    describe '#<=>' do
+      let(:money_1) { MoneyGem::Money.new(10, 'USD') }
+      let(:money_2) { MoneyGem::Money.new(10, 'EUR') }
+      let(:money_3) { MoneyGem::Money.new(13, 'USD') }
+      before { stub_const('EXCHANGE_RATES', {'EUR_USD' => 1.3}) }
+
+      it 'should correctly compare Money instances' do
+        expect(money_1 < money_2).to eq(true)
+        expect(money_3 == money_2).to eq(true)
+      end
+    end
+
     describe '#to_s' do
       it 'should return a properly formatted string' do
         expect(money.to_s).to eq('10.00 USD')

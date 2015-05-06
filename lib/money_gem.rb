@@ -60,7 +60,7 @@ module MoneyGem
     end
 
     def exchange_to(currency)
-      amount = self.class.exchange.convert(self, currency)
+      self.amount = self.class.exchange.convert(self, currency)
       self.currency = currency
       self
     end
