@@ -40,7 +40,7 @@ module MoneyGem
     def method_missing(name)
       name = name.to_s
       if correct_conversion_method?(name)
-        self.exchange_to(name.split('_').last.upcase)
+        exchange_to(name.split('_').last.upcase)
       else
         raise NoMethodError, "Unknown method: #{name}"
       end
@@ -60,7 +60,7 @@ module MoneyGem
     end
 
     def exchange_to(currency)
-      self.amount = self.class.exchange.convert(self, currency)
+      amount = self.class.exchange.convert(self, currency)
       self.currency = currency
       self
     end
