@@ -97,7 +97,7 @@ describe MoneyGem::Money do
     end
 
     describe '#method_missing' do
-      before { stub_const('Exchange::CURRENCIES', ['USD', 'EUR']) }
+      before { stub_const('CURRENCIES', ['USD', 'EUR']) }
 
       context 'with correct conversion method' do
         it 'should call the #exchange_to method with expected argument' do
@@ -109,6 +109,64 @@ describe MoneyGem::Money do
       context 'with undefined method' do
         it 'should raise NoMethodError' do
           expect { money.to_wtf }.to raise_exception(NoMethodError)
+        end
+      end
+    end
+
+    describe '#calculate_in' do
+      let(:exchange) { double('Exchange', convert: 8) }
+      before { allow(money.class).to receive(:exchange).and_return(exchange) }
+
+      it 'should call the Exchange#convert method' do
+        expect(money.class.exchange).to receive(:convert)
+
+        money.calculate_in('EUR')
+      end
+
+      it 'should return an expected MoneyGem::Money instance' do
+        new_money = money.calculate_in('EUR')
+
+        expect(new_money).to be_an_instance_of(MoneyGem::Money)
+        expect(new_money.currency).to eq('EUR')
+        expect(new_money.amount).to eq(8)
+      end
+    end
+
+    describe '#arithmetic methods' do
+      let(:money_usd) { MoneyGem::Money.new(10, 'USD') }
+      let(:money_eur) { MoneyGem::Money.new(10, 'EUR') }
+      before { allow(money_eur).to receive(:calculate_in).and_return(MoneyGem::Money.new(20, 'USD')) }
+      before { stub_const('CURRENCIES', ['USD', 'EUR']) }
+
+      context 'when currencies are different' do
+        it 'should execute #calculate_in' do
+          expect(money_eur).to receive(:calculate_in).and_return(MoneyGem::Money.new(20, 'USD'))
+
+          money_usd + money_eur
+        end
+      end
+
+      describe '#+' do
+        it 'should return a correct MoneyGem::Money instance' do
+          expect(money_usd + money_eur).to eq(MoneyGem::Money.new(30, 'USD'))
+        end
+      end
+
+      describe '#-' do
+        it 'should return a correct MoneyGem::Money instance' do
+          expect(money_usd - money_eur).to eq(MoneyGem::Money.new(-10, 'USD'))
+        end
+      end
+
+      describe '#*' do
+        it 'should return a correct MoneyGem::Money instance' do
+          expect(money_usd * money_eur).to eq(MoneyGem::Money.new(200, 'USD'))
+        end
+      end
+
+      describe '#/' do
+        it 'should return a correct MoneyGem::Money instance' do
+          expect(money_usd / money_eur).to eq(MoneyGem::Money.new(0.5, 'USD'))
         end
       end
     end

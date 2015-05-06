@@ -61,8 +61,7 @@ module MoneyGem
 
     def calculate_in(currency)
       new_amount = self.class.exchange.convert(self, currency)
-      new_money = self.class.new(new_amount, currency)
-      new_money
+      self.class.new(new_amount, currency)
     end
 
     def exchange_to(currency)
