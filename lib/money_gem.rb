@@ -74,7 +74,7 @@ module MoneyGem
     end
 
     def self.exchange
-      Exchange.new
+      MoneyGem::Exchange.new
     end
 
     def self.using_default_currency(currency)
