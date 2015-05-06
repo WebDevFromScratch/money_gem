@@ -30,7 +30,7 @@ module MoneyGem
 
     [:from_usd, :from_eur, :from_gbp].each do |method_name|
       define_singleton_method method_name do |amount|
-        self.new(amount, method_name.to_s.split('_').last.upcase)
+        new(amount, method_name.to_s.split('_').last.upcase)
       end
     end
 
