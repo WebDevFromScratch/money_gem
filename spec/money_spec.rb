@@ -71,7 +71,7 @@ describe MoneyGem::Money do
       let(:money_1) { MoneyGem::Money.new(10, 'USD') }
       let(:money_2) { MoneyGem::Money.new(10, 'EUR') }
       let(:money_3) { MoneyGem::Money.new(13, 'USD') }
-      before { stub_const('EXCHANGE_RATES', {'EUR_USD' => 1.3}) }
+      before { allow_any_instance_of(MoneyGem::Exchange).to receive(:get_exchange_rate).and_return('1.3') }
 
       it 'should correctly compare Money instances' do
         expect(money_1 < money_2).to eq(true)

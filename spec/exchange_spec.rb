@@ -5,7 +5,7 @@ describe MoneyGem::Exchange do
   let(:money) { double('Money', amount: 10, currency: 'EUR') }
 
   describe '#convert' do
-    before { stub_const('EXCHANGE_RATES', {'EUR_USD' => 1.3}) }
+    before { allow(exchange).to receive(:get_exchange_rate).and_return('1.3') }
 
     context 'with correct currency input' do
       it 'returns a correct value' do
