@@ -47,7 +47,7 @@ module MoneyGem
     end
 
     def respond_to?(name)
-      (correct_conversion_method?(name.to_s) || ['+', '-', '*', '/'].include?(name.to_s)) ? true : super
+      (correct_conversion_method?(name.to_s) || arithmetic_method?(name.to_s)) ? true : super
     end
 
     def calculate_in(currency)
@@ -91,6 +91,10 @@ module MoneyGem
 
     def correct_conversion_method?(name)
       name.split('_').count == 2 && name.split('_').first == 'to' && CURRENCIES.include?(name.split('_').last.upcase)
+    end
+
+    def arithmetic_method?(name)
+      ['+', '-', '*', '/'].include?(name)
     end
 
     def calculate_if_necessary(other)
