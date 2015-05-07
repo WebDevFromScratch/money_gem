@@ -29,11 +29,17 @@ module MoneyGem
       end
     end
 
-    [:+, :-, :*, :/].each do |method_name|
+    [:+, :-].each do |method_name|
       define_method method_name do |other|
         recalculated_other = calculate_if_necessary(other)
 
         self.class.new(amount.send(method_name, recalculated_other.amount), currency)
+      end
+    end
+
+    [:*, :/].each do |method_name|
+      define_method method_name do |number|
+        self.class.new(amount.send(method_name, number), currency)
       end
     end
 

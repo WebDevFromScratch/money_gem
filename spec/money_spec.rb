@@ -171,13 +171,13 @@ describe MoneyGem::Money do
 
       describe '#*' do
         it 'should return a correct MoneyGem::Money instance' do
-          expect(money_usd * money_eur).to eq(MoneyGem::Money.new(200, 'USD'))
+          expect(money_usd * 2).to eq(MoneyGem::Money.new(20, 'USD'))
         end
       end
 
       describe '#/' do
         it 'should return a correct MoneyGem::Money instance' do
-          expect(money_usd / money_eur).to eq(MoneyGem::Money.new(0.5, 'USD'))
+          expect(money_usd / 2).to eq(MoneyGem::Money.new(5, 'USD'))
         end
       end
     end
